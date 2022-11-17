@@ -1,20 +1,40 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+const articlesInfo = {
+  "learn-react": {
+    comments: [],
+  },
+  "learn-node": {
+    comments: [],
+  },
+  "my-thougts-on-learning-react": {
+    comments: [],
+  },
+};
+
 //Iniitalize middleware
-app.use(express.json({extended:false}))
+app.use(express.json({ extended: false }));
 
 //Route test
-app.get('/', (req,res) => {
-    res.send("Hola mundo!!!");
+app.get("/", (req, res) => {
+  res.send("Hola mundo!!!");
 });
-app.post('/',(req,res)=>{
-    res.send(`The request ${req.body.text}`)
+app.post("/", (req, res) => {
+  res.send(`The request ${req.body.text}`);
 });
 
-app.get("/hello/:name", (req,res) => {
-    res.send(`The article ${req.params.name}`)
-})
+app.get("/hello/:name", (req, res) => {
+  res.send(`The article ${req.params.name}`);
+});
 
-app.listen(PORT, ()=>console.log(`Server started at port ${PORT}`));
+//Router production
+app.post("/api/articles/:name/add-comments", (req, res) => {
+  const { username, text } = req.body;
+  const articleName = req.params.name;
+  articlesInfo[articleName].comments.push({ username, text });
+  res.status(200).send(articlesInfo[articleName]);
+});
+
+app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
