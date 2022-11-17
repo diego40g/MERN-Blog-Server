@@ -13,4 +13,8 @@ app.post('/',(req,res)=>{
     res.send(`The request ${req.body.text}`)
 });
 
+app.get("/hello/:name", (req,res) => {
+    res.send(`The article ${req.params.name}`)
+})
+
 app.listen(PORT, ()=>console.log(`Server started at port ${PORT}`));
