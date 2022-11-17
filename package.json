@@ -1,0 +1,27 @@
+{
+  "name": "mern-blog-server",
+  "version": "1.0.0",
+  "description": "Nodejs project of blog using express and mongo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diego40g/MERN-Blog-Server.git"
+  },
+  "author": "Diego Paz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diego40g/MERN-Blog-Server/issues"
+  },
+  "homepage": "https://github.com/diego40g/MERN-Blog-Server#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^7.5.0",
+    "nodemon": "^2.0.20"
+  }
+}
