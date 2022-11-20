@@ -1,35 +1,26 @@
 const express = require("express");
+const {MongoClient} = require("mongodb");
+const dotenv = require('dotenv').config();
+
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const articlesInfo = {
-  "learn-react": {
-    comments: [],
-  },
-  "learn-node": {
-    comments: [],
-  },
-  "my-thougts-on-learning-react": {
-    comments: [],
-  },
-};
-
-//Iniitalize middleware
+//Initialize middleware
 app.use(express.json({ extended: false }));
 
-//Route test
-app.get("/", (req, res) => {
-  res.send("Hola mundo!!!");
-});
-app.post("/", (req, res) => {
-  res.send(`The request ${req.body.text}`);
-});
+app.get('/api/articles/:name', async(req,res)=>{
+  try{
+    const articleName = req.params.name;
+    const client=await MongoClient.connect(process.env.MONGO_URL);
+    const db=client.db("mern-blog");
+    const articleInfo= await db.collection('articles').findOne({name: articleName});
+    res.status(200).json(articleInfo);
+    client.close();
+  }catch(error){
+    res.status(500).json({message: "Error connection to database",error})
+  }
+})
 
-app.get("/hello/:name", (req, res) => {
-  res.send(`The article ${req.params.name}`);
-});
-
-//Router production
 app.post("/api/articles/:name/add-comments", (req, res) => {
   const { username, text } = req.body;
   const articleName = req.params.name;
