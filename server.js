@@ -8,18 +8,24 @@ const PORT = process.env.PORT || 8000;
 //Initialize middleware
 app.use(express.json({ extended: false }));
 
-app.get('/api/articles/:name', async(req,res)=>{
+const withDB = async(operations)=>{
   try{
-    const articleName = req.params.name;
     const client=await MongoClient.connect(process.env.MONGO_URL);
     const db=client.db("mern-blog");
-    const articleInfo= await db.collection('articles').findOne({name: articleName});
-    res.status(200).json(articleInfo);
+    await operations(db)
     client.close();
   }catch(error){
     res.status(500).json({message: "Error connection to database",error})
   }
-})
+}
+
+app.get('/api/articles/:name', async(req,res)=>{
+  withDB(async(db)=>{
+    const articleName = req.params.name;
+    const articleInfo= await db.collection('articles').findOne({name: articleName});
+    res.status(200).json(articleInfo);
+  },res)
+});
 
 app.post("/api/articles/:name/add-comments", (req, res) => {
   const { username, text } = req.body;
