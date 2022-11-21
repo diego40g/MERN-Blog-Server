@@ -30,6 +30,7 @@ app.get('/api/articles/:name', async(req,res)=>{
 app.post("/api/articles/:name/add-comments", (req, res) => {
   const { username, text } = req.body;
   const articleName = req.params.name;
+  
   withDB(async(db)=>{
     const articleInfo = await db.collection('articles').findOne({name: articleName});
     await db.collection('articles').updateOne(
